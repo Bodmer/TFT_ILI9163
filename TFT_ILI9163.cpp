@@ -233,7 +233,8 @@ void TFT_ILI9163::init(void)
 	// Initialization commands for ILI9163 screens
 	static const uint8_t ILI9163_cmds[] PROGMEM =
 	{
-	16,             // 16 command follow
+	17,             // 17 commands follow
+	0x01,  0,       // Software reset
 	0x11,  0,       // Exit sleep mode
 	0x3A,  1, 0x05, // Set pixel format
 	0x26,  1, 0x04, // Set Gamma curve
