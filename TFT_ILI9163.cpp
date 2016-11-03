@@ -1131,7 +1131,7 @@ void TFT_ILI9163::fastSetup(void)
   addr_col = 0;
   SPDR = 0; spiWait12();
   win_xe=_width-1;
-  SPDR = 0; spiWait14();
+  SPDR = 0; spiWait15();
   SPDR = _width-1; spiWait14();
 
   TFT_DC_C;
@@ -1143,7 +1143,7 @@ void TFT_ILI9163::fastSetup(void)
   addr_row = 0;
   SPDR = 0; spiWait12();
   win_ye=_height-1;
-  SPDR = 0; spiWait14();
+  SPDR = 0; spiWait15();
   SPDR = _height-1; spiWait14();
 
   TFT_CS_H;
@@ -2195,6 +2195,9 @@ inline void spiWrite16s(uint16_t data)
 
     "	out	%[spi],%[lo]\n"			// write SPI data
     "	nop         \n"	// 1
+    " adiw  r24,0	  \n"	// 3
+    " adiw  r24,0      \n"	// 5
+
     "5:\n"
     : [temp] "=d" (temp)
     : [spi] "i" (_SFR_IO_ADDR(SPDR)), [lo] "r" ((uint8_t)data), [hi] "r" ((uint8_t)(data>>8))
