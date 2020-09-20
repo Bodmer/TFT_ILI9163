@@ -1683,8 +1683,10 @@ int TFT_ILI9163::drawChar(unsigned int uniCode, int x, int y, int font)
   }
 
   unsigned int width  = 0;
+#if defined(LOAD_FONT2) || defined(LOAD_RLE)
   unsigned int height = 0;
   unsigned int flash_address = 0; // 16 bit address OK for Arduino if font files <60K
+#endif
   uniCode -= 32;
 
 #ifdef LOAD_FONT2
@@ -1709,15 +1711,21 @@ int TFT_ILI9163::drawChar(unsigned int uniCode, int x, int y, int font)
   }
 #endif
 
+#if defined(LOAD_FONT2) || defined(LOAD_RLE)
   int w = width;
-  int pX      = 0;
   int pY      = y;
   byte line = 0;
 
   byte tl = textcolor;
   byte th = textcolor >> 8;
+#endif
+
+#ifdef LOAD_FONT2
+  int pX      = 0;
+
   byte bl = textbgcolor;
   byte bh = textbgcolor >> 8;
+#endif
 
 #ifdef LOAD_FONT2 // chop out 962 bytes of code if we do not need it
   if (font == 2) {
@@ -1815,7 +1823,7 @@ int TFT_ILI9163::drawChar(unsigned int uniCode, int x, int y, int font)
     w *= height; // Now w is total number of pixels in the character
     if ((textsize != 1) || (textcolor == textbgcolor)) {
       if (textcolor != textbgcolor) fillRect(x, pY, width * textsize, textsize * height, textbgcolor);
-      int px = 0, py = pY, tpy = pY; // To hold character block start and end column and row values
+      int px = 0, py = pY; // To hold character block start and end column and row values
       int pc = 0; // Pixel count
       byte np = textsize * textsize; // Number of pixels in a drawn pixel
 
